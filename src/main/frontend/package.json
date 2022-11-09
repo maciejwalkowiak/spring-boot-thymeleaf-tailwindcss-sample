@@ -1,0 +1,11 @@
+{
+  "name": "frontend",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./main.css -o ../resources/static/main.css",
+    "watch": "tailwindcss -i ./main.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.2"
+  }
+}
