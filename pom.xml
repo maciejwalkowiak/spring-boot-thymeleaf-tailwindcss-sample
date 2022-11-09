@@ -171,7 +171,6 @@
 			<id>unix</id>
 			<activation>
 				<os>
-					<family>unix</family>
 					<name>Linux</name>
 				</os>
 			</activation>
