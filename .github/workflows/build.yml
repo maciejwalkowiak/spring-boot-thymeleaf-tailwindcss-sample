@@ -12,4 +12,5 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
+          cache: maven
       - run: ./mvnw package
