@@ -168,6 +168,17 @@
 				<tailwind.file>tailwindcss-macos-x64</tailwind.file>
 			</properties>
 		</profile>
+		<profile>
+			<id>unix</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<tailwind.file>tailwindcss-linux-x64</tailwind.file>
+			</properties>
+		</profile>
 	</profiles>
 
 </project>
