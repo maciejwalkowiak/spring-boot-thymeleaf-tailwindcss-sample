@@ -54,7 +54,6 @@
 				<version>1.6.8</version>
 				<configuration>
 					<url>https://github.com/tailwindlabs/tailwindcss/releases/download/${tailwind.version}/${tailwind.file}</url>
-					<outputFileName>tailwind</outputFileName>
 				</configuration>
 			</plugin>
 
@@ -72,7 +71,7 @@
 							<executable>chmod</executable>
 							<arguments>
 								<argument>+x</argument>
-								<argument>${project.build.directory}/tailwind</argument>
+								<argument>${project.build.directory}/${tailwind.file}</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -102,7 +101,7 @@
 								<task>
 									<exec>
 										<directory>src/main/frontend</directory>
-										<command>${project.build.directory}/tailwind -i ./main.css -o ../resources/static/main.css</command>
+										<command>${project.build.directory}/${tailwind.file} -i ./main.css -o ../resources/static/main.css</command>
 									</exec>
 								</task>
 							</tasks>
@@ -120,7 +119,7 @@
 									<async>true</async>
 									<exec>
 										<directory>src/main/frontend</directory>
-										<command>${project.build.directory}/tailwind -i ./main.css --watch -o ../resources/static/main.css</command>
+										<command>${project.build.directory}/${tailwind.file} -i ./main.css --watch -o ../resources/static/main.css</command>
 									</exec>
 								</task>
 								<!--
@@ -131,7 +130,7 @@
 									<async>true</async>
 									<exec>
 										<directory>src/main/frontend</directory>
-										<command>${project.build.directory}/tailwind -i ./main.css --watch -o ${project.build.directory}/classes/static/main.css</command>
+										<command>${project.build.directory}/${tailwind.file} -i ./main.css --watch -o ${project.build.directory}/classes/static/main.css</command>
 									</exec>
 								</task>
 								<task>
