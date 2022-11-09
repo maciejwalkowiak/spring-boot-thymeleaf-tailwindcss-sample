@@ -13,7 +13,7 @@ $ ./mvnw package
 To run in dev mode:
 
 ```bash
-$ ./mvnw paseq:exec
+$ ./mvnw paseq:exec@dev
 ```
 
 Live reloading the browser without needing to refresh it possible with [Live Reload Extension](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei/related).

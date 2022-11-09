@@ -75,39 +75,42 @@
 							</tasks>
 						</configuration>
 					</execution>
+					<execution>
+						<id>dev</id>
+						<!-- configuration for running in dev mode with ./mvnw paseq:exec -->
+						<configuration>
+							<tasks>
+								<task>
+									<exec>
+										<directory>src/main/frontend</directory>
+										<command>npm install</command>
+									</exec>
+								</task>
+								<task>
+									<async>true</async>
+									<exec>
+										<directory>src/main/frontend</directory>
+										<command>npm run watch -- -o ../resources/static/main.css</command>
+									</exec>
+								</task>
+								<!--
+								optionally post-processed CSS file can also be generated in `target` directory.
+								Changes to main.css will trigger live reload without a need to recompile the project in Intellij IDEA
+								-->
+								<task>
+									<async>true</async>
+									<exec>
+										<directory>src/main/frontend</directory>
+										<command>npm run watch -- -o ${project.build.directory}/classes/static/main.css</command>
+									</exec>
+								</task>
+								<task>
+									<goals>spring-boot:run</goals>
+								</task>
+							</tasks>
+						</configuration>
+					</execution>
 				</executions>
-				<!-- configuration for running in dev mode with ./mvnw paseq:exec -->
-				<configuration>
-					<tasks>
-						<task>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm install</command>
-							</exec>
-						</task>
-						<task>
-							<async>true</async>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm run watch -- -o ../resources/static/main.css</command>
-							</exec>
-						</task>
-						<!--
-						optionally post-processed CSS file can also be generated in `target` directory.
-						Changes to main.css will trigger live reload without a need to recompile the project in Intellij IDEA
-						-->
-						<task>
-							<async>true</async>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm run watch -- -o ${project.build.directory}/classes/static/main.css</command>
-							</exec>
-						</task>
-						<task>
-							<goals>spring-boot:run</goals>
-						</task>
-					</tasks>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
