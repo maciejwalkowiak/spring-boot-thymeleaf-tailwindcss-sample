@@ -2,7 +2,7 @@
 
 Follow tutorial 👉 [http://maciejwalkowiak.com/blog/spring-boot-thymeleaf-tailwindcss](http://maciejwalkowiak.com/blog/spring-boot-thymeleaf-tailwindcss)
 
-CSS file is located in `src/main/frontend/main.css`.
+`CSS` file is located in `src/main/frontend/main.css`.
 
 Building the project:
 
