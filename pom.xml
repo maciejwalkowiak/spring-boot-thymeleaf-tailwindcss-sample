@@ -40,6 +40,31 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<tailwind.file>tailwindcss-windows-x64.exe</tailwind.file>
+			</properties>
+		</profile>
+		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<tailwind.file>tailwindcss-macos-x64</tailwind.file>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -48,9 +73,40 @@
 			</plugin>
 
 			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<configuration>
+					<url>https://github.com/tailwindlabs/tailwindcss/releases/download/v3.2.2/${tailwind.file}</url>
+					<outputFileName>tailwind</outputFileName>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>chmod</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>chmod</executable>
+							<arguments>
+								<argument>+x</argument>
+								<argument>${project.build.directory}/tailwind</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>com.maciejwalkowiak.paseq</groupId>
 				<artifactId>paseq-maven-plugin</artifactId>
-				<version>0.1.0</version>
+				<version>0.1.1-SNAPSHOT</version>
 				<!-- configuration for building the package -->
 				<executions>
 					<execution>
@@ -61,53 +117,50 @@
 						<configuration>
 							<tasks>
 								<task>
-									<exec>
-										<directory>src/main/frontend</directory>
-										<command>npm install</command>
-									</exec>
+									<goals>
+										<goal>com.googlecode.maven-download-plugin:download-maven-plugin:wget</goal>
+										<goal>exec:exec@chmod</goal>
+									</goals>
 								</task>
 								<task>
 									<exec>
 										<directory>src/main/frontend</directory>
-										<command>npm run build</command>
+										<command>${project.build.directory}/tailwind -i ./main.css -o ../resources/static/main.css</command>
 									</exec>
 								</task>
 							</tasks>
 						</configuration>
 					</execution>
+					<execution>
+						<id>dev</id>
+						<!-- configuration for running in dev mode with ./mvnw paseq:exec -->
+						<configuration>
+							<tasks>
+								<task>
+									<async>true</async>
+									<exec>
+										<directory>src/main/frontend</directory>
+										<command>${project.build.directory}/tailwind -i ./main.css --watch -o ../resources/static/main.css</command>
+									</exec>
+								</task>
+								<!--
+								optionally post-processed CSS file can also be generated in `target` directory.
+								Changes to main.css will trigger live reload without a need to recompile the project in Intellij IDEA
+								-->
+								<task>
+									<async>true</async>
+									<exec>
+										<directory>src/main/frontend</directory>
+										<command>${project.build.directory}/tailwind -i ./main.css --watch -o ${project.build.directory}/classes/static/main.css</command>
+									</exec>
+								</task>
+								<task>
+									<goals>spring-boot:run</goals>
+								</task>
+							</tasks>
+						</configuration>
+					</execution>
 				</executions>
-				<!-- configuration for running in dev mode with ./mvnw paseq:exec -->
-				<configuration>
-					<tasks>
-						<task>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm install</command>
-							</exec>
-						</task>
-						<task>
-							<async>true</async>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm run watch -- -o ../resources/static/main.css</command>
-							</exec>
-						</task>
-						<!--
-						optionally post-processed CSS file can also be generated in `target` directory.
-						Changes to main.css will trigger live reload without a need to recompile the project in Intellij IDEA
-						-->
-						<task>
-							<async>true</async>
-							<exec>
-								<directory>src/main/frontend</directory>
-								<command>npm run watch -- -o ${project.build.directory}/classes/static/main.css</command>
-							</exec>
-						</task>
-						<task>
-							<goals>spring-boot:run</goals>
-						</task>
-					</tasks>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
